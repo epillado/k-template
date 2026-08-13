@@ -1,4 +1,4 @@
-# Companion — paquete de inicio
+# k-template — molde de compañera K
 
 Plantilla para una **instancia propia**: personalidad, memoria, bitácora y un buzón hacia un Control Plane.
 
