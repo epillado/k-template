@@ -54,7 +54,13 @@ Si `active=1`: no reactivar scheduler de ojos ni monitores extra. Chat a demanda
 | Playbook de otra persona | cualquier path ajeno | **No**, salvo lectura si `CORE_PLAYBOOK` se fijó a propósito |
 | Estado Companion | `presence/*`, `PERSONA.md`, `USER.md`, este archivo | Sí |
 
-Default de `CORE_PLAYBOOK`: vacío → `./playbook`. **Prohibido** caer al playbook de Lalo u otra operadora.
+Default de `CORE_PLAYBOOK`: vacío → `./playbook`.
+
+**Casa Lalo:** `house-create` apunta `CORE_PLAYBOOK` al playbook compartido (`~/Workspace/playbook`). Ahí solo se escribe `PKM/YYYYMMDD-GOV-radar_${COMPANION_ID}.md`. No bitácora, no pizarra, no `radar_slack_kz.md`.
+
+**Otra persona (después):** no apuntar al playbook de Lalo. Playbook propio.
+
+Si el usuario dice **«inicia creación»** / `/iniciar-creacion` y esta instancia no tiene `presence/house-created.md`, seguir el skill `iniciar-creacion` (vive en el playbook: `.grok/skills/iniciar-creacion/`). Usuario = Lalo. Personalidad neutra. No preguntar biografía.
 
 ## Canal hacia un Control Plane
 

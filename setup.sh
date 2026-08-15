@@ -3,6 +3,7 @@
 # No copia ~/kz ni el playbook de nadie.
 #
 #   ./setup.sh [DEST] [--id slug] [--name "Nombre"]
+#   ./setup.sh --house     # casa Lalo: delega en house-create
 #   DEST por defecto: $HOME/companion
 set -euo pipefail
 
@@ -10,13 +11,24 @@ SRC="$(cd "$(dirname "$0")" && pwd)"
 DEST="${HOME}/companion"
 ID=""
 NAME=""
+HOUSE=0
+HOUSE_ARGS=()
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --house)
+      HOUSE=1
+      shift
+      ;;
+    --yes|-y|--force|--install-skill)
+      HOUSE_ARGS+=("$1")
+      shift
+      ;;
     --id) ID="${2:-}"; shift 2 ;;
     --name) NAME="${2:-}"; shift 2 ;;
     --help|-h)
       echo "uso: $0 [DEST] [--id slug] [--name \"Nombre\"]"
+      echo "     $0 --house [--yes]   # casa Lalo"
       exit 0
       ;;
     --*)
@@ -29,6 +41,15 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+if [[ "${HOUSE}" -eq 1 ]]; then
+  HOUSE_SH="${HOME}/Workspace/playbook/.grok/skills/iniciar-creacion/scripts/house-create.sh"
+  [[ -x "${HOUSE_SH}" ]] || { echo "no encuentro house-create en el playbook" >&2; exit 1; }
+  extra=()
+  [[ -n "${ID}" ]] && extra+=(--id "$ID")
+  [[ -n "${NAME}" ]] && extra+=(--name "$NAME")
+  exec "${HOUSE_SH}" --dest "${DEST}" "${extra[@]}" "${HOUSE_ARGS[@]}"
+fi
 
 if [[ -z "$ID" ]]; then
   read -r -p "COMPANION_ID (slug, ej. ale): " ID

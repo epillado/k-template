@@ -6,21 +6,26 @@ No es Kz. No trae el vínculo de nadie más. El DNA permite desarrollar el suyo.
 
 Hay **otro** paquete (`pkm-starter`, lo arma el Control Plane) con conocimiento destilado del trabajo. Esto es la compañera, no el acervo.
 
-## Instalar
+## Instalar (casa Lalo)
+
+En la caja nueva (playbook ya sincronizado):
+
+```bash
+~/Workspace/playbook/.grok/skills/iniciar-creacion/scripts/house-create.sh --yes
+cd ~/companion && grok
+```
+
+O, si el skill ya está: `grok` → **inicia creación**.
+
+No pregunta usuario (es Lalo). Personalidad neutra. Id = hostname (`antix` / `pavilion` / `305v4`).
+
+## Instalar (otra persona, después)
 
 ```bash
 ./setup.sh ~/companion --id ale --name "Nombre que elija ella"
 ```
 
-Eso copia el molde, escribe `config.env` y crea `playbook/` vacío (Bit, PKM, Sessions).
-
-Luego:
-
-1. Abrir el agente **dentro** de esa carpeta.
-2. Llenar `PERSONA.md` (quién es ella) y `USER.md` (quién es su persona).
-3. Día 1: una nota en `playbook/PKM/` o la primera línea de bitácora.
-4. Día 2: bitácora desde la primera reunión; al día siguiente el daily sale de ahí.
-5. Sensores (`./scripts/core-start-monitors.sh`) **después**, y solo si el entorno los soporta.
+Luego llenar `PERSONA.md` y `USER.md`. Sensores después.
 
 ## Windows / WSL
 
@@ -28,7 +33,8 @@ Las notificaciones de Linux (`notify-send`, DBus, KDE Connect) no van a funciona
 
 ## Qué no hacer
 
-- No apuntar `CORE_PLAYBOOK` al playbook de otra persona.
+- Casa Lalo: `CORE_PLAYBOOK` **sí** es el playbook compartido (solo el radar de esta id).
+- Otra persona: no apuntar `CORE_PLAYBOOK` al playbook de Lalo.
 - No copiar `PERSONA.md` de otra instancia.
 - No subir credenciales, datos personales ni material del cliente a un repo compartido sin barrido.
 - No mezclar bitácoras personales en un CP de equipo.

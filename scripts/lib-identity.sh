@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Identidad de esta instancia + playbook propio.
-# Nunca cae al playbook de otra persona (no ~/Workspace/playbook ajeno).
+# Casa Lalo: CORE_PLAYBOOK puede ser ~/Workspace/playbook (solo radar_${ID}).
+# Otra persona: vacío → $CORE_HOME/playbook. No caer al playbook ajeno.
 #
 # Fuente: $CORE_HOME/config.env
 #   COMPANION_ID    slug [a-z0-9_-] — buzón PKM = …-radar_${COMPANION_ID}.md
