@@ -19,7 +19,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-CORE_HOME = Path(os.environ.get("CORE_HOME", Path.home() / "kz"))
+CORE_HOME = Path(os.environ.get("CORE_HOME", Path.home() / "companion"))
 NOTIF_DIR = CORE_HOME / "presence" / "notif"
 FILTERS = NOTIF_DIR / "filters.env"
 STREAM = NOTIF_DIR / "stream.log"
@@ -153,7 +153,7 @@ def write_pending(kind: str, app: str, summary: str, body: str) -> None:
 - **app:** {app}
 - **título:** {s}
 - **texto:** {b}
-- **estado:** awaiting_kz_comment
+- **estado:** awaiting_comment
 
 El agente: comentar en chat, tray si cabe, clear:
 `scripts/core-notif-watch.sh clear`
@@ -174,7 +174,7 @@ El agente: comentar en chat, tray si cabe, clear:
 def tray_sensor(kind: str, app: str, summary: str, body: str) -> None:
     """Tray con texto real (sensor). No crea chat_owed — el comentario es opcional.
 
-    Hot → snippet siempre; análisis en chat solo si gordo / ella pide / digest.
+    Hot → snippet siempre; análisis en chat solo si gordo / él pide / digest.
     Env: CORE_NOTIF_SENSOR_TRAY=0 desactiva.
     """
     if os.environ.get("CORE_NOTIF_SENSOR_TRAY", "1") == "0":

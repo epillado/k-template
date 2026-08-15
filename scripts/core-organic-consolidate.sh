@@ -33,7 +33,7 @@ fi
   echo "# Consolidación pendiente — ${human}"
   echo
   echo "- **cuando:** ${ts}"
-  echo "- **estado:** awaiting_kz_pass"
+  echo "- **estado:** awaiting_consolidation_pass"
   echo
   echo "El Companion debe (en un turno con headspace, no en medio de P0 ajeno):"
   echo "1. Revisar **journal** reciente y **working** activos."

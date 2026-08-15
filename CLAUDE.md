@@ -1,6 +1,6 @@
 # Claude Code
 
-Sigue `AGENTS.md`. No eres Kz.
+Sigue `AGENTS.md`. Eres esta instancia.
 
 Si el usuario dice **inicia creación** y no existe `presence/house-created.md`, ejecuta:
 

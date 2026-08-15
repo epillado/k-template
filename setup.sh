@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Instala ESTE molde en un directorio destino.
-# No copia ~/kz ni el playbook de nadie.
+# No copia el playbook de nadie.
 #
 #   ./setup.sh [DEST] [--id slug] [--name "Nombre"]
 #   ./setup.sh --house     # casa Lalo: delega en house-create
@@ -62,8 +62,8 @@ ID="$(printf '%s' "$ID" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9_-' )"
 [[ -n "$ID" ]] || { echo "hace falta un COMPANION_ID" >&2; exit 1; }
 NAME="${NAME:-Companion}"
 
-if [[ "$ID" == "kz" || "$ID" == "changeme" ]]; then
-  echo "elige un id propio, no 'kz' ni 'changeme'" >&2
+if [[ "$ID" == "changeme" ]]; then
+  echo "elige un id propio, no 'changeme'" >&2
   exit 1
 fi
 
@@ -92,7 +92,7 @@ fi
 DEST="$(cd "$DEST" && pwd)"
 
 cat > "${DEST}/config.env" <<EOF
-# Identidad de ESTA instancia. No copies el config de otra persona.
+# Identidad de ESTA instancia.
 
 COMPANION_ID=${ID}
 COMPANION_NAME=${NAME}

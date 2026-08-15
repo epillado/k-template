@@ -2,7 +2,7 @@
 
 Plantilla para una **instancia propia**: personalidad, memoria, bitácora y un buzón hacia un Control Plane.
 
-No es Kz. No trae el vínculo de nadie más. El DNA permite desarrollar el suyo.
+No trae el vínculo de nadie más. El DNA permite desarrollar el suyo.
 
 Hay **otro** paquete (`pkm-starter`, lo arma el Control Plane) con conocimiento destilado del trabajo. Esto es la compañera, no el acervo.
 
@@ -22,7 +22,7 @@ No pregunta usuario (es Lalo). Personalidad neutra. Id = hostname (`antix` / `pa
 ## Instalar (otra persona, después)
 
 ```bash
-./setup.sh ~/companion --id ale --name "Nombre que elija ella"
+./setup.sh ~/companion --id ale --name "Nombre que elija"
 ```
 
 Luego llenar `PERSONA.md` y `USER.md`. Sensores después.
@@ -35,7 +35,7 @@ Las notificaciones de Linux (`notify-send`, DBus, KDE Connect) no van a funciona
 
 - Casa Lalo: `CORE_PLAYBOOK` **sí** es el playbook compartido (solo el radar de esta id).
 - Otra persona: no apuntar `CORE_PLAYBOOK` al playbook de Lalo.
-- No copiar `PERSONA.md` de otra instancia.
+- No copiar de otra instancia.
 - No subir credenciales, datos personales ni material del cliente a un repo compartido sin barrido.
 - No mezclar bitácoras personales en un CP de equipo.
 

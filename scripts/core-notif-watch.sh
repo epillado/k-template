@@ -192,7 +192,7 @@ write_pending() {
     echo "- **título:** ${title}"
     echo "- **texto:** ${text}"
     echo "- **ticker:** ${ticker}"
-    echo "- **estado:** awaiting_kz_comment"
+    echo "- **estado:** awaiting_comment"
     echo
     echo "El agente: leer esto, **comentar en chat** (¿importante? ¿avisar/silenciar?),"
     echo "tray corto si cabe, y clear: \`rm -f ${PENDING_FILE} ${PENDING_TS}\` o \`core-notif-watch.sh clear\`."

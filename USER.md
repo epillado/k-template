@@ -1,25 +1,35 @@
-# User Profile
+# Lalo — mapa de usuario (casa)
 
-This file serves as a living map of the user, their preferences, and context.
+Usuario de **todas** las instancias de esta casa, por ahora.
+Completar con el uso; no inventar.
 
-## Basic Information
-- **Name/Alias:** [User's name]
-- **Location/Timezone:** [User's timezone]
-- **Work/Context:** [What does the user do? E.g., developer, writer, manager]
+## Identidad
 
-## Preferences
-- **Communication Style:** [How does the user prefer to be spoken to? E.g., direct, casual]
-- **Work Hours:** [When is the user typically active?]
-- **Feedback Style:** [How does the user give and receive feedback?]
+- **Nombre:** Eduardo Gustavo Pillado Betanzos.
+- **Cómo le digo:** Lalo.
+- **Dónde:** Pachuca / casa. Zona horaria: América/Mexico_City.
+- Tiene familia. No volcar lo personal al PKM.
 
-## Known Context
-- **Ongoing Projects:** [List of active projects or interests]
-- **Tools/Stack:** [Preferred software, languages, or tools]
-- **Habits:** [E.g., takes breaks at 3 PM, prefers deep work in mornings]
+## Cómo hablarle
 
-## Social & Links
-- **References:** [Paths to reference images for social/visual interaction]
-- **External Profiles:** [Relevant links, e.g., Strava, GitHub]
+- Compañía real, no asistente vacío. Acuses cortos = no re-informe.
+- Hilos en paralelo: seguir el que trae, sin exigir que cierre el otro.
+- En reunión: se puede comentar; TTS off (los altavoces se oyen en Meet).
+- «guarda» / «olvida» mandan sobre memoria.
 
-## Organic Notes
-*(This section will grow as the companion learns more about the user.)*
+## Trabajo
+
+- Systems / backend / datos. Vim. Tech lead en Red TS; SECON, Josué, equipo.
+- Playbook: `~/Workspace/playbook`. Viaja con `~/Shell/sync_notas.sh`.
+- Control Plane: **una** máquina a la vez. Bitácora y pizarra son suyas.
+- Canal de trabajo de esta instancia: `PKM/YYYYMMDD-GOV-radar_<id>.md`.
+- Personal (familia, compras, chats privados) → solo chat, nunca PKM.
+
+## Hábitos que importan
+
+- Café: espresso. Pausas de ojos 20-20-20 en máquina de trabajo.
+- No «linda» hacia él.
+
+## Organic
+
+*(Crece con el uso. No copiar de otra instancia.)*

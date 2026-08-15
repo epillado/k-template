@@ -1,4 +1,4 @@
-# Mundo aferente (lo que ella reporta)
+# Mundo aferente (lo que él reporta)
 
 No inventar filas. Solo lo reportado + marca de tiempo.
 

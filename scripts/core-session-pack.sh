@@ -13,7 +13,7 @@ P="${CORE_HOME}/presence"
 mode="${1:-summary}"
 
 paths_core=(
-  "${CORE_HOME}/KZ.md"
+  "${CORE_HOME}/PERSONA.md"
   "${CORE_HOME}/LALO.md"
   "${CORE_HOME}/AGENTS.md"
   "${P}/policy.md"
@@ -37,7 +37,7 @@ if [[ "${mode}" == "paths" ]]; then
 fi
 
 echo "## Checklist de carga (orden sugerido)"
-echo "1. KZ.md + LALO.md + AGENTS.md (si no están en contexto)"
+echo "1. PERSONA.md + USER.md + AGENTS.md (si no están en contexto)"
 echo "2. presence/policy.md  (hábitos duros/blandos)"
 echo "3. presence/self.md    (cómo estoy ahora)"
 echo "4. presence/world.md + SYMBIOSIS.md  (aferencia / simbiosis de planos)"

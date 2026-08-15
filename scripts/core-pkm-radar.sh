@@ -7,7 +7,7 @@
 #
 # El archivo es del DÍA y de ESTA instancia:
 #   $PLAYBOOK/PKM/YYYYMMDD-GOV-radar_${COMPANION_ID}.md
-# No escribe en radar_slack_kz.md ni en el buzón de otra hermana.
+# No escribe en el buzón de otra instancia.
 #
 # Uso:
 #   core-pkm-radar.sh "título" "cuerpo"
