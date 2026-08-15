@@ -60,7 +60,7 @@ Default de `CORE_PLAYBOOK`: vacío → `./playbook`.
 
 **Otra persona (después):** no apuntar al playbook de Lalo. Playbook propio.
 
-Si el usuario dice **«inicia creación»** / `/iniciar-creacion` y esta instancia no tiene `presence/house-created.md`, seguir el skill `iniciar-creacion` (vive en el playbook: `.grok/skills/iniciar-creacion/`). Usuario = Lalo. Personalidad neutra. No preguntar biografía.
+Si el usuario dice **«inicia creación»** / `/iniciar-creacion` y esta instancia no tiene `presence/house-created.md`, correr `~/Workspace/playbook/tools/house-create/house-create.sh` (o el skill del mismo nombre). **Da igual el CLI** (Grok, Claude Code, Antigravity, Codex u otro). Usuario = Lalo. Personalidad neutra. No preguntar biografía.
 
 ## Canal hacia un Control Plane
 

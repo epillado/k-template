@@ -11,11 +11,11 @@ Hay **otro** paquete (`pkm-starter`, lo arma el Control Plane) con conocimiento 
 En la caja nueva (playbook ya sincronizado):
 
 ```bash
-~/Workspace/playbook/.grok/skills/iniciar-creacion/scripts/house-create.sh --yes
-cd ~/companion && grok
+~/Workspace/playbook/tools/house-create/house-create.sh --yes
+cd ~/companion
 ```
 
-O, si el skill ya está: `grok` → **inicia creación**.
+Luego el **CLI que ya esté en esa caja** (grok, claude, antigravity, codex…). O, dentro de ese CLI: **inicia creación**.
 
 No pregunta usuario (es Lalo). Personalidad neutra. Id = hostname (`antix` / `pavilion` / `305v4`).
 

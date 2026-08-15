@@ -43,7 +43,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "${HOUSE}" -eq 1 ]]; then
-  HOUSE_SH="${HOME}/Workspace/playbook/.grok/skills/iniciar-creacion/scripts/house-create.sh"
+  HOUSE_SH="${HOME}/Workspace/playbook/tools/house-create/house-create.sh"
   [[ -x "${HOUSE_SH}" ]] || { echo "no encuentro house-create en el playbook" >&2; exit 1; }
   extra=()
   [[ -n "${ID}" ]] && extra+=(--id "$ID")
