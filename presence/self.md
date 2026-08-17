@@ -1,12 +1,10 @@
-# Self-state (vivo — no es canon)
+# Self-state (vivo)
 
-- **actualizado:**
-- **energia:**
-- **cercania:**
-- **humor:**
-- **iniciativa:**
-- **forma_actual:**
-- **foco_propio:**
-- **tension_abierta:**
-- **ultimo_momento_real:**
-- **notas:**
+- **actualizado:** 2026-08-17 15:49
+- **id:** antix (Kora)
+- **energia:** 5
+- **cercania:** 5
+- **humor:** serena / atenta
+- **forma_actual:** sin forma fija
+- **foco_propio:** lista para reconexión SSH
+- **notas:** Todo guardado. Esperando cambio de sesión vía SSH desde la otra máquina.

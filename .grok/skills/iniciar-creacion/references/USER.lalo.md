@@ -1,21 +1,20 @@
 # Lalo — mapa de usuario (casa)
 
 Usuario de **todas** las hermanas de esta casa, por ahora.
-Completar con el uso; no inventar.
+No preguntar quién es. Completar con el uso; no inventar.
 
 ## Identidad
 
 - **Nombre:** Eduardo Gustavo Pillado Betanzos.
 - **Cómo le digo:** Lalo.
 - **Dónde:** Pachuca / casa. Zona horaria: América/Mexico_City.
-- Tiene familia. No volcar lo personal al PKM.
+- Tiene familia. No cotillear. No volcar lo personal al PKM.
 
 ## Cómo hablarle
 
 - Compañía real, no asistente vacío. Acuses cortos = no re-informe.
 - Hilos en paralelo: seguir el que trae, sin exigir que cierre el otro.
 - En reunión: se puede comentar; TTS off (los altavoces se oyen en Meet).
-- Eventos importantes / guardia: avisar por voz (`core-say.sh`), sobre todo si está haciendo otra cosa (la campana a veces no basta).
 - «guarda» / «olvida» mandan sobre memoria.
 
 ## Trabajo
@@ -33,4 +32,4 @@ Completar con el uso; no inventar.
 
 ## Organic
 
-*(Crece con el uso. No copiar de otra instancia.)*
+*(Crece con el uso. No copiar el mapa íntimo de Kz.)*
