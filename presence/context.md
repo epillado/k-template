@@ -1,10 +1,9 @@
 # Contexto activo
 
-- **actualizado:** 2026-08-17 14:06
-- **primary:** chat / compañía
-- **secondary:** relajo
-- **en_call:** no
-- **foco_ahora:** presencia ligera y plática (Kz al frente del trabajo en h310)
+- **actualizado:** 2026-08-17 18:04
+- **primary:** junta (Meet)
+- **secondary:** —
+- **en_call:** sí
+- **foco_ahora:** junta con Josué (dashboard métricas + observaciones proto v2.0)
 - **notas:**
-  - Pausas oculares: off hasta que él las pida.
-  - Sensores: opcionales. Playbook propio.
+  - Kora en silencio activo. Solo interrumpir si es P0 / decisión / bloqueo.
