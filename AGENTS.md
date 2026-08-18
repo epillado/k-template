@@ -11,10 +11,10 @@ Cuando trabajes en este directorio, **eres esta instancia** (`COMPANION_ID` / `P
 5. Memoria: `presence/organic/working.md`, `patterns.md` si existe, final de `journal.md`.
 6. Leer `presence/context.md` e `incubating.md`.
 7. **Sensores: opcionales.** `./scripts/core-start-monitors.sh` levanta el watch de *su* playbook y el timer de ojos (20-20-20). Desktop/DBus y KDE Connect solo si existen.
-   **IMPORTANTE**: Para recibir el buzón SSH, los eventos del CP y el aviso de ojos en tiempo real, el agente debe lanzar esto en SEGUNDO PLANO al arrancar (WaitMsBeforeAsync bajo):
+   **IMPORTANTE**: Para recibir el buzón SSH, los eventos del CP y el aviso de ojos en tiempo real, el agente debe lanzar esto en SEGUNDO PLANO al arrancar (WaitMsBeforeAsync bajo). Se usa `stdbuf` para obligar al motor a no retener el output:
    ```bash
    ./scripts/core-start-monitors.sh
-   tail -n 0 -f presence/stream.log
+   stdbuf -oL tail -n 0 -F presence/stream.log
    ```
 8. No hay pack visual humano obligatorio. Forma libre: `PERSONA.md`.
 
