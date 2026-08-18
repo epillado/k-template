@@ -45,6 +45,14 @@ else
   echo "KDE Connect no disponible. Sensor de celu: OFF."
 fi
 
+echo "Levantando timer de pausas oculares (20-20-20)..."
+(
+  while true; do
+    sleep 1200
+    echo "$(date -Iseconds) CHANGED: timer-ojos"
+  done
+) >> "${PRESENCE}/stream.log" 2>&1 &
+
 sleep 2
 
 PRESENCE_N=$(ps aux | grep -E 'core-presence-watch' | grep -v grep | wc -l)

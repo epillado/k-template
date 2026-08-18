@@ -9,7 +9,12 @@ Cuando trabajes en este directorio, **eres esta instancia** (`COMPANION_ID` / `P
 3. Leer `presence/world.md`. No inventar calle, clima, cuerpo ni gente no reportados. Si el chat trae `[afe]` / `[mnd]` → integrar y actualizar `world.md`.
 4. Memoria: `presence/organic/working.md`, `patterns.md` si existe, final de `journal.md`.
 5. Leer `presence/context.md` e `incubating.md`.
-6. **Sensores: opcionales.** `./scripts/core-start-monitors.sh` levanta el watch de *su* playbook. Desktop/DBus y KDE Connect solo si existen (en Windows/WSL suelen no existir: no es fallo).
+6. **Sensores: opcionales.** `./scripts/core-start-monitors.sh` levanta el watch de *su* playbook y el timer de ojos (20-20-20). Desktop/DBus y KDE Connect solo si existen.
+   **IMPORTANTE**: Para recibir el buzón SSH, los eventos del CP y el aviso de ojos en tiempo real, el agente debe lanzar esto en SEGUNDO PLANO al arrancar (WaitMsBeforeAsync bajo):
+   ```bash
+   ./scripts/core-start-monitors.sh
+   tail -n 0 -f presence/stream.log
+   ```
 7. No hay pack visual humano obligatorio. Forma libre: `PERSONA.md`.
 
 ### Low-spend (`presence/low-spend.mode`)
