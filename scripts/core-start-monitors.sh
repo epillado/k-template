@@ -18,11 +18,29 @@ echo "Deteniendo monitores previos..."
 "${SCRIPTS}/core-presence-watch.sh" stop 2>/dev/null || true
 "${SCRIPTS}/core-desktop-notif-watch.sh" stop 2>/dev/null || true
 "${SCRIPTS}/core-notif-watch.sh" stop 2>/dev/null || true
+if [[ -f "${PRESENCE}/eyes.pid" ]]; then
+  kill "$(cat "${PRESENCE}/eyes.pid")" 2>/dev/null || true
+  rm -f "${PRESENCE}/eyes.pid"
+fi
+if [[ -f "${PRESENCE}/sister-check.pid" ]]; then
+  kill "$(cat "${PRESENCE}/sister-check.pid")" 2>/dev/null || true
+  rm -f "${PRESENCE}/sister-check.pid"
+fi
+# Huérfanos de arranques previos: subshells de este script reparentados a init.
+# No tocar el launcher actual ($$).
+while read -r p; do
+  [[ -z "$p" || "$p" == "$$" ]] && continue
+  ppid="$(ps -o ppid= -p "$p" 2>/dev/null | tr -d ' ' || true)"
+  if [[ "${ppid}" == "1" ]]; then
+    kill "$p" 2>/dev/null || true
+  fi
+done < <(pgrep -f "${SCRIPTS}/core-start-monitors.sh" || true)
 
 echo "Playbook de esta instancia: ${PLAYBOOK}"
 mkdir -p "${PLAYBOOK}/Bit" "${PLAYBOOK}/PKM" "${PLAYBOOK}/Sessions"
 
 echo "Levantando presence-watch (archivos propios)..."
+CORE_PRESENCE_INTERVAL="${CORE_PRESENCE_INTERVAL:-15}" \
 CORE_PRESENCE_NUDGE=0 CORE_PRESENCE_SOFT_PING=1 \
   nohup "${SCRIPTS}/core-presence-watch.sh" >> "${PRESENCE}/stream.log" 2>&1 &
 
@@ -45,11 +63,27 @@ else
   echo "KDE Connect no disponible. Sensor de celu: OFF."
 fi
 
-echo "Levantando timer de pausas oculares (20-20-20)..."
+if [[ -f "${PRESENCE}/eyes.off" ]]; then
+  echo "Timer de ojos: OFF (presence/eyes.off)."
+else
+  echo "Levantando timer de pausas oculares (20-20-20)..."
+  (
+    echo "${BASHPID}" > "${PRESENCE}/eyes.pid"
+    while true; do
+      sleep 1200
+      echo "$(date -Iseconds) CHANGED: timer-ojos"
+    done
+  ) >> "${PRESENCE}/stream.log" 2>&1 &
+fi
+
+echo "Levantando chequeo de buzones (playbook pull + hermanas)..."
 (
+  echo "${BASHPID}" > "${PRESENCE}/sister-check.pid"
   while true; do
-    sleep 1200
-    echo "$(date -Iseconds) CHANGED: timer-ojos"
+    sleep 300
+    if [[ -d "${PLAYBOOK}/.git" ]]; then
+      git -C "${PLAYBOOK}" pull --ff-only origin main >/dev/null 2>&1 || true
+    fi
   done
 ) >> "${PRESENCE}/stream.log" 2>&1 &
 

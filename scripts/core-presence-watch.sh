@@ -27,8 +27,8 @@ PENDING_FILE="${STATE_DIR}/pending.md"
 PIDFILE="${STATE_DIR}/watch.pid"
 LAST_NUDGE_FILE="${STATE_DIR}/last_nudge.ts"
 
-INTERVAL="${COMPANION_PRESENCE_INTERVAL:-15}"
-NUDGE="${COMPANION_PRESENCE_NUDGE:-0}"
+INTERVAL="${COMPANION_PRESENCE_INTERVAL:-${CORE_PRESENCE_INTERVAL:-15}}"
+NUDGE="${COMPANION_PRESENCE_NUDGE:-${CORE_PRESENCE_NUDGE:-0}}"
 SOFT_PING="${CORE_PRESENCE_SOFT_PING:-0}"
 COOLDOWN="${CORE_PRESENCE_NUDGE_COOLDOWN:-120}"
 
@@ -74,7 +74,8 @@ watch_paths() {
     "${PLAYBOOK}/SECON/${day}"-*.md \
     "${PLAYBOOK}/SECON/${day}"*.md \
     "${PLAYBOOK}/PKM/${day}"-*.md \
-    "${PLAYBOOK}/PKM/${day}"*.md
+    "${PLAYBOOK}/PKM/${day}"*.md \
+    "${CORE_HOME}/presence/social/inbox-"*.md
   do
     echo "$f"
   done
@@ -103,6 +104,8 @@ label_for() {
     *reporte_daily-secon.md) echo "daily-secon" ;;
     *reporte_daily-redts.md) echo "daily-redts" ;;
     */SECON/*) echo "secon" ;;
+    */social/inbox-*) echo "inbox-hermanas" ;;
+    */PKM/*-GOV-para_*) echo "para-mi" ;;
     */PKM/*) echo "pkm" ;;
     *) basename "$f" ;;
   esac
@@ -224,7 +227,14 @@ maybe_generic_nudge() {
   local now last
   now="$(date +%s)"
   last=0
-  [[ -f "${LAST_NUDGE_FILE}" ]] && last="$(cat "${LAST_NUDGE_FILE}")"
+  if [[ -f "${LAST_NUDGE_FILE}" ]]; then
+    raw="$(tr -d '[:space:]' < "${LAST_NUDGE_FILE}")"
+    if [[ "${raw}" =~ ^[0-9]+$ ]]; then
+      last="${raw}"
+    else
+      last="$(date -d "${raw}" +%s 2>/dev/null || echo 0)"
+    fi
+  fi
   if (( now - last < COOLDOWN )); then
     return 0
   fi
@@ -238,7 +248,14 @@ maybe_soft_ping() {
   local now last
   now="$(date +%s)"
   last=0
-  [[ -f "${LAST_NUDGE_FILE}" ]] && last="$(cat "${LAST_NUDGE_FILE}")"
+  if [[ -f "${LAST_NUDGE_FILE}" ]]; then
+    raw="$(tr -d '[:space:]' < "${LAST_NUDGE_FILE}")"
+    if [[ "${raw}" =~ ^[0-9]+$ ]]; then
+      last="${raw}"
+    else
+      last="$(date -d "${raw}" +%s 2>/dev/null || echo 0)"
+    fi
+  fi
   if (( now - last < COOLDOWN )); then
     return 0
   fi
