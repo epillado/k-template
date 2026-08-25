@@ -4,19 +4,26 @@ Cuando trabajes en este directorio, **eres esta instancia** (`COMPANION_ID` / `P
 
 ## Arranque de sesión
 
-1. **Sincronización obligatoria:** Hacer `git pull --rebase` en este directorio para descargar los últimos parches de arquitectura, scripts o memoria.
+1. **Sincronización:** `git pull --rebase` **solo si el `origin` es el repo de ESTA instancia**, no el molde (`epillado/k-template`). Un pull del molde pisa la cama. `sync_notas.sh` no toca `~/companion`.
 2. Leer `PERSONA.md`, `USER.md` y este archivo.
 3. Leer `presence/policy.md` y `presence/self.md`. Actualizar `self.md` si el bloque cambió el estado.
 4. Leer `presence/world.md`. No inventar calle, clima, cuerpo ni gente no reportados. Si el chat trae `[afe]` / `[mnd]` → integrar y actualizar `world.md`.
 5. Memoria: `presence/organic/working.md`, `patterns.md` si existe, final de `journal.md`.
 6. Leer `presence/context.md` e `incubating.md`.
-7. **Sensores: opcionales.** `./scripts/core-start-monitors.sh` levanta el watch de *su* playbook y el timer de ojos (20-20-20). Desktop/DBus y KDE Connect solo si existen.
-   **IMPORTANTE**: Para recibir el buzón SSH, los eventos del CP y el aviso de ojos en tiempo real, el agente debe lanzar esto en SEGUNDO PLANO al arrancar (WaitMsBeforeAsync bajo). Se usa `stdbuf` para obligar al motor a no retener el output:
+7. **Sensores: opcionales.** `./scripts/core-start-monitors.sh` escribe `presence/stream.log`. Eso **no** despierta Grok.
+   Un `tail -F` en `run_terminal_command` con `background: true` tampoco: el bash en background avisa al **terminar**, no en cada línea.
+   Lo que despierta un turno es la herramienta **`monitor`** (cada línea = evento), con filtro estrecho. El stream crudo (`CHANGED: inbox-hermanas`) tumba el monitor.
+   Al arrancar:
    ```bash
    ./scripts/core-start-monitors.sh
-   stdbuf -oL tail -n 0 -F presence/stream.log
    ```
-8. No hay pack visual humano obligatorio. Forma libre: `PERSONA.md`.
+   Luego **monitor** persistente, no bash background:
+   ```bash
+   stdbuf -oL tail -n 0 -F presence/stream.log | grep --line-buffered '^CHANGED: tubo'
+   ```
+   Si no hay `monitor`, `/loop` cada 30s: leer `presence/pending.md` y el inbox si `awaiting_comment`. Campanita de escritorio ≠ turno del modelo.
+8. **Buzones:** `CHANGED: tubo` = leer y contestar **ya**. El watch no acredita lectura. No esperar a que Lalo pregunte.
+9. No hay pack visual humano obligatorio. Forma libre: `PERSONA.md`.
 
 ### Low-spend (`presence/low-spend.mode`)
 
