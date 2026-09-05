@@ -30,3 +30,16 @@ else
 fi
 
 RADAR_BASENAME="$(date +%Y%m%d)-GOV-radar_${COMPANION_ID}.md"
+
+# Auto-detección de DISPLAY y DBus si corremos en subshell sin sesión gráfica directa
+if [[ -z "${DISPLAY:-}" && -e /tmp/.X11-unix/X0 ]]; then
+  export DISPLAY=":0.0"
+fi
+if [[ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ]]; then
+  if pgrep -u "$USER" icewm >/dev/null 2>&1; then
+    _dbus_addr="$(cat /proc/$(pgrep -u "$USER" icewm | head -1)/environ 2>/dev/null | tr '\0' '\n' | grep '^DBUS_SESSION_BUS_ADDRESS=' | cut -d= -f2- || true)"
+    if [[ -n "${_dbus_addr}" ]]; then
+      export DBUS_SESSION_BUS_ADDRESS="${_dbus_addr}"
+    fi
+  fi
+fi

@@ -28,7 +28,7 @@ EVENTS = NOTIF_DIR / "events.log"
 PENDING = NOTIF_DIR / "pending.md"
 PENDING_TS = NOTIF_DIR / "pending.ts"
 PENDING_LABELS = NOTIF_DIR / "pending_labels.txt"
-CHANGED_LOG = NOTIF_DIR / "changed.log"  # cola de wake para el monitor del agente
+CHANGED_LOG = CORE_HOME / "presence" / "stream.log"  # cola de wake directa para el monitor del agente
 PIDFILE = NOTIF_DIR / "desktop-watch.pid"
 
 
@@ -60,7 +60,13 @@ def load_filters() -> dict[str, str]:
             if not line or line.startswith("#") or "=" not in line:
                 continue
             k, _, v = line.partition("=")
-            defaults[k.strip()] = v.strip().strip("'").strip('"')
+            k_clean = k.strip()
+            v_clean = v.strip().strip("'").strip('"')
+            defaults[k_clean] = v_clean
+            if k_clean.startswith("KZ_NOTIF_"):
+                defaults[k_clean.replace("KZ_NOTIF_", "CORE_NOTIF_")] = v_clean
+            elif k_clean.startswith("CORE_NOTIF_"):
+                defaults[k_clean.replace("CORE_NOTIF_", "KZ_NOTIF_")] = v_clean
     return defaults
 
 
@@ -86,7 +92,7 @@ def classify(app: str, summary: str, body: str) -> str:
     if ci_search(blob, F.get("CORE_NOTIF_BLOCK", "")):
         return "skip"
     # Nunca hot/pending de nuestras propias campanitas o popups (evita bucle infinto notify-send -> DBus -> notify-send)
-    if ci_search(app, r"^Companion$|core-nudge|notify-send") or ci_search(summary, r"🔔|\[IMPORTANT\]"):
+    if ci_search(app, r"^Kora$|^Kora ·|^Companion$|core-nudge|notify-send") or ci_search(summary, r"🔔|\[IMPORTANT\]"):
         return "skip"
     # 2026-08-06: Abierto para ver KDE Connect / WhatsApp / Chrome si están en CORE_NOTIF_APP_IMPORTANT
     if ci_search(blob, r"Missed call|missed call|Sensitive notification"):
@@ -145,23 +151,24 @@ def write_pending(kind: str, app: str, summary: str, body: str) -> None:
     b = body.replace("\n", " ")
     when = now()
     label = f"{kind}: {app} — {s}"[:120]
-    PENDING.write_text(
-        f"""# Pending — notif (desktop)
+    with PENDING.open("a", encoding="utf-8") as f:
+        f.write(
+            f"""# Pending — notif Kora (desktop)
 
 - **cuando:** {when}
 - **clase:** {kind}
 - **app:** {app}
 - **título:** {s}
 - **texto:** {b}
-- **estado:** awaiting_comment
+- **estado:** awaiting_companion_comment
 
-El agente: comentar en chat, tray si cabe, clear:
+El agente: comentar en chat (voz Kora), tray si cabe, clear:
 `scripts/core-notif-watch.sh clear`
-""",
-        encoding="utf-8",
-    )
+"""
+        )
     PENDING_TS.write_text(when + "\n", encoding="utf-8")
-    PENDING_LABELS.write_text(label + "\n", encoding="utf-8")
+    with PENDING_LABELS.open("a", encoding="utf-8") as f:
+        f.write(label + "\n")
     with EVENTS.open("a", encoding="utf-8") as f:
         f.write(f"{when} DESKTOP {kind} app={app} title={s}\n")
     changed_line = f"CHANGED: notif:{kind}:{app}:{s[:80]}"
