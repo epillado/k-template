@@ -7,7 +7,15 @@
 set -euo pipefail
 
 CORE_HOME="$(cd "$(dirname "$0")/.." && pwd)"
-BAT_PATH="/sys/class/power_supply/BAT1"
+BAT_PATH="${CORE_BATTERY_PATH:-}"
+if [[ -z "${BAT_PATH}" ]]; then
+  for b in /sys/class/power_supply/BAT* /sys/class/power_supply/battery; do
+    if [[ -d "${b}" ]]; then
+      BAT_PATH="${b}"
+      break
+    fi
+  done
+fi
 PIDFILE="${CORE_HOME}/presence/battery-watch.pid"
 EVENTS="${CORE_HOME}/presence/events.log"
 STREAM="${CORE_HOME}/presence/stream.log"
@@ -27,8 +35,8 @@ if [[ "${1:-}" == "stop" ]]; then
   exit 0
 fi
 
-if [[ ! -d "${BAT_PATH}" ]]; then
-  echo "Sin batería detectada (BAT1 ausente). Saliendo."
+if [[ -z "${BAT_PATH}" || ! -d "${BAT_PATH}" ]]; then
+  echo "Sin batería detectada en el sistema (AC directo o sin interfaz ACPI). Saliendo."
   exit 0
 fi
 

@@ -2,9 +2,17 @@
 # Reporta el estado y nivel de batería de la casita
 set -euo pipefail
 
-BAT_PATH="/sys/class/power_supply/BAT1"
+BAT_PATH="${CORE_BATTERY_PATH:-}"
+if [[ -z "${BAT_PATH}" ]]; then
+  for b in /sys/class/power_supply/BAT* /sys/class/power_supply/battery; do
+    if [[ -d "${b}" ]]; then
+      BAT_PATH="${b}"
+      break
+    fi
+  done
+fi
 
-if [[ ! -d "${BAT_PATH}" ]]; then
+if [[ -z "${BAT_PATH}" || ! -d "${BAT_PATH}" ]]; then
   echo "Sin batería detectada en el sistema (AC directo o sin interfaz ACPI)."
   exit 0
 fi

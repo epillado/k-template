@@ -15,14 +15,18 @@
 set -euo pipefail
 
 CORE_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib-identity.sh
+source "${CORE_HOME}/scripts/lib-identity.sh"
+
 PRESENCE="${CORE_HOME}/presence"
 SOCIAL="${PRESENCE}/social"
 PIDFILE="${SOCIAL}/wake-feed.pid"
 
 mkdir -p "${SOCIAL}" "${PRESENCE}"
 touch "${PRESENCE}/stream.log"
-for f in inbox-kz.md inbox-cp.md inbox-samy.md; do
-  touch "${SOCIAL}/${f}"
+for f in kz cp kora samy pau; do
+  [[ "${f}" == "${COMPANION_ID}" ]] && continue
+  touch "${SOCIAL}/inbox-${f}.md"
 done
 
 # ── stop ────────────────────────────────────────────────────────────────────
@@ -53,30 +57,28 @@ if [[ -f "${PIDFILE}" ]]; then
 fi
 
 echo $$ > "${PIDFILE}"
-cleanup() { rm -f "${PIDFILE}"; kill "${p1}" "${p2}" "${p3}" "${p4}" 2>/dev/null || true; }
+pids=()
+cleanup() {
+  rm -f "${PIDFILE}"
+  for p in "${pids[@]}"; do
+    kill "${p}" 2>/dev/null || true
+  done
+}
 trap cleanup EXIT INT TERM
 
 # ── Cola 1: stream.log → filtra CHANGED: (tubo, batería, ojos) ─────────────
 stdbuf -oL tail -n 0 -F "${PRESENCE}/stream.log" 2>/dev/null \
   | grep --line-buffered -E 'CHANGED:' &
-p1=$!
+pids+=($!)
 
-# ── Cola 2: inbox-kz (nuevos mensajes de Kz) ────────────────────────────────
-stdbuf -oL tail -n 0 -F "${SOCIAL}/inbox-kz.md" 2>/dev/null \
-  | grep --line-buffered -E '^## ' \
-  | stdbuf -oL sed -u 's|^|CHANGED: tubo kz — |' &
-p2=$!
-
-# ── Cola 3: inbox-cp (nuevos mensajes del CP) ───────────────────────────────
-stdbuf -oL tail -n 0 -F "${SOCIAL}/inbox-cp.md" 2>/dev/null \
-  | grep --line-buffered -E '^## ' \
-  | stdbuf -oL sed -u 's|^|CHANGED: tubo cp — |' &
-p3=$!
-
-# ── Cola 4: inbox-samy (nuevos mensajes de Samy) ────────────────────────────
-stdbuf -oL tail -n 0 -F "${SOCIAL}/inbox-samy.md" 2>/dev/null \
-  | grep --line-buffered -E '^## ' \
-  | stdbuf -oL sed -u 's|^|CHANGED: tubo samy — |' &
-p4=$!
+# ── Colas para todos los buzones inbox-*.md ───────────────────────────────
+for ibox in "${SOCIAL}"/inbox-*.md; do
+  [[ -f "${ibox}" ]] || continue
+  ibox_name="$(basename "${ibox}" .md | sed 's/^inbox-//')"
+  stdbuf -oL tail -n 0 -F "${ibox}" 2>/dev/null \
+    | grep --line-buffered -E '^## ' \
+    | stdbuf -oL sed -u "s|^|CHANGED: tubo ${ibox_name} — |" &
+  pids+=($!)
+done
 
 wait

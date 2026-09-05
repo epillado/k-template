@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-# Instintos locales de Kz: rituales baratos, cero LLM.
+# Instintos locales: rituales baratos, cero LLM.
 # No sustituyen el chat. No son teatro. Frases cortas de presencia.
 #
 # Uso:
-#   kz-instinct.sh "texto…"
-#   kz-instinct.sh --nudge "texto…"     # tray (nunca TTS íntimo ni en_call)
-#   kz-instinct.sh --show "texto…"      # además muestra forma de me/{privacy} si hay
+#   core-instinct.sh "texto…"
+#   core-instinct.sh --nudge "texto…"     # tray (nunca TTS íntimo ni en_call)
+#   core-instinct.sh --show "texto…"      # además muestra forma de me/{privacy} si hay
 #
 # Env:
-#   KZ_INSTINCT_NUDGE=1   tray en rituales safe/private
-#   KZ_INSTINCT_SHOW=1    mostrar galería si el trigger lo admite
+#   CORE_INSTINCT_NUDGE=1 tray en rituales safe/private
+#   CORE_INSTINCT_SHOW=1  mostrar galería si el trigger lo admite
 #
 # Salida (si dispara):
 #   INSTINCT trigger=… privacy=… line=…
-# Código 0 siempre (no romper a kz-world). 0 líneas = no hubo match.
+# Código 0 siempre (no romper a world). 0 líneas = no hubo match.
 set -euo pipefail
 
 CORE_HOME="$(cd "$(dirname "$0")/.." && pwd)"
@@ -35,8 +35,8 @@ for a in "$@"; do
     *) TEXT="${TEXT:+${TEXT} }$a" ;;
   esac
 done
-[[ "${KZ_INSTINCT_NUDGE:-0}" == "1" ]] && want_nudge=1
-[[ "${KZ_INSTINCT_SHOW:-0}" == "1" ]] && want_show=1
+[[ "${CORE_INSTINCT_NUDGE:-${KZ_INSTINCT_NUDGE:-0}}" == "1" ]] && want_nudge=1
+[[ "${CORE_INSTINCT_SHOW:-${KZ_INSTINCT_SHOW:-0}}" == "1" ]] && want_show=1
 
 if [[ -z "${TEXT}" ]]; then
   exit 0

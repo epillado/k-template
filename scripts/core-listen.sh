@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Oídos de Kora: Transcripción local de voz vía Whisper LAN + PipeWire/ALSA
+# Oídos locales: Transcripción local de voz vía Whisper LAN + PipeWire/ALSA
 # Uso:
 #   core-listen.sh               # Graba 6 segundos del mic y transcribe
 #   core-listen.sh 8             # Graba 8 segundos
@@ -10,24 +10,28 @@
 set -euo pipefail
 
 CORE_HOME="$(cd "$(dirname "$0")/.." && pwd)"
-AUDIO_TMP="/tmp/kora-listen-mic.wav"
-PID_FILE="/tmp/kora-listen.pid"
+# shellcheck source=lib-identity.sh
+source "${CORE_HOME}/scripts/lib-identity.sh"
+
+AUDIO_TMP="/tmp/${COMPANION_ID}-listen-mic.wav"
+PID_FILE="/tmp/${COMPANION_ID}-listen.pid"
 LOG_FILE="${CORE_HOME}/presence/listen.log"
-H310_HOST="lalo@192.168.1.100"
-H310_WHISPER="~/kz/tools/whisper.cpp/build/bin/whisper-cli"
-H310_MODEL="~/kz/tools/whisper.cpp/models/ggml-base.bin"
+H310_HOST="${CORE_WHISPER_HOST:-lalo@192.168.1.100}"
+H310_WHISPER="${CORE_WHISPER_BIN:-~/kz/tools/whisper.cpp/build/bin/whisper-cli}"
+H310_MODEL="${CORE_WHISPER_MODEL:-~/kz/tools/whisper.cpp/models/ggml-base.bin}"
 
 transcribe() {
   local target_file="${1:-${AUDIO_TMP}}"
   [[ -f "${target_file}" ]] || { echo "error: archivo de audio no existe" >&2; exit 1; }
 
   # Copiar temporal a h310 para whisper-cli
-  scp -q "${target_file}" "${H310_HOST}:/tmp/kora-listen-remote.wav" 2>/dev/null || true
+  scp -q "${target_file}" "${H310_HOST}:/tmp/${COMPANION_ID}-listen-remote.wav" 2>/dev/null || true
 
-  # Inferencia Whisper remota en h310 con prompt contextual de Kora
+  # Inferencia Whisper remota en h310 con prompt contextual de la compañera
   local raw_output
+  local prompt_text="Hola ${COMPANION_NAME}, ¿me oyes? Conversación con ${COMPANION_NAME} y Lalo."
   raw_output="$(ssh -o BatchMode=yes -o ConnectTimeout=5 "${H310_HOST}" \
-    "${H310_WHISPER} -m ${H310_MODEL} -f /tmp/kora-listen-remote.wav -l es -t 4 --prompt 'Hola Kora, ¿me oyes? Kora preciosa. Conversación con Kora y Lalo.' --no-prints" 2>/dev/null || true)"
+    "${H310_WHISPER} -m ${H310_MODEL} -f /tmp/${COMPANION_ID}-listen-remote.wav -l es -t 4 --prompt '${prompt_text}' --no-prints" 2>/dev/null || true)"
 
   # Limpiar timestamps y espacios extras
   local clean_text
@@ -101,7 +105,7 @@ case "${1:-}" in
     kill -INT "${REC_PID}" 2>/dev/null || kill -TERM "${REC_PID}" 2>/dev/null || true
     sleep 0.2
     play_beep stop
-    echo -n "Kora escuchó: "
+    echo -n "${COMPANION_NAME} escuchó: "
     transcribe "${AUDIO_TMP}"
     ;;
 esac

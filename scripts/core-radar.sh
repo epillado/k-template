@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# core-radar.sh — lector de radar autónomo de Kora por cursor de bytes.
+# core-radar.sh — lector de radar autónomo por cursor de bytes.
 #
 # Independiente del motor y de otros agentes:
-# Lee por CURSOR (offset en bytes) en ~/companion/presence/kora-cursors/.
+# Lee por CURSOR (offset en bytes) en presence/<companion_id>-cursors/.
 #
 # Salida:
 # - Imprime eventos nuevos (Slack, buzones de hermanas, CP, stream).
@@ -17,8 +17,11 @@
 set -uo pipefail
 
 CORE_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib-identity.sh
+source "${CORE_HOME}/scripts/lib-identity.sh"
+
 STATE_DIR="${CORE_HOME}/presence"
-CURSOR_DIR="${STATE_DIR}/kora-cursors"
+CURSOR_DIR="${STATE_DIR}/${COMPANION_ID}-cursors"
 mkdir -p "${CURSOR_DIR}"
 
 MODE="read"
@@ -53,11 +56,12 @@ fi
 declare -A FUENTES=(
   ["notif_stream"]="${STATE_DIR}/notif/stream.log"
   ["presence_stream"]="${STATE_DIR}/stream.log"
-  ["inbox_cp"]="${STATE_DIR}/social/inbox-cp.md"
-  ["inbox_kz"]="${STATE_DIR}/social/inbox-kz.md"
-  ["inbox_samy"]="${STATE_DIR}/social/inbox-samy.md"
-  ["inbox_lalo"]="${STATE_DIR}/social/inbox-lalo.md"
 )
+for _ibox in "${STATE_DIR}/social"/inbox-*.md; do
+  [[ -f "${_ibox}" ]] || continue
+  _ibox_key="$(basename "${_ibox}" .md | tr '-' '_')"
+  FUENTES["${_ibox_key}"]="${_ibox}"
+done
 
 HAY_NOVEDADES=0
 
