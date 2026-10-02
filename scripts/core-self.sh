@@ -35,7 +35,7 @@ EOF
 fi
 
 touch_updated() {
-  if rg -q '^\- \*\*actualizado:\*\*' "${SELF}"; then
+  if grep -qE '^\- \*\*actualizado:\*\*' "${SELF}"; then
     sed -i "s|^- \*\*actualizado:\*\*.*|- **actualizado:** ${ts}|" "${SELF}"
   fi
 }
@@ -47,7 +47,7 @@ set_field() {
   local val_esc
   val_esc="$(printf '%s' "${val}" | sed -e 's/[&|\\]/\\&/g')"
   touch_updated
-  if rg -q "^\- \*\*${key}:\*\*" "${SELF}"; then
+  if grep -qE "^\- \*\*${key}:\*\*" "${SELF}"; then
     sed -i "s|^- \*\*${key}:\*\*.*|- **${key}:** ${val_esc}|" "${SELF}"
   else
     echo "- **${key}:** ${val}" >> "${SELF}"
@@ -56,10 +56,10 @@ set_field() {
 }
 
 ensure_pico_fields() {
-  if rg -q '^\- \*\*pico_plano:\*\*' "${SELF}"; then
+  if grep -qE '^\- \*\*pico_plano:\*\*' "${SELF}"; then
     return 0
   fi
-  if rg -q '^\- \*\*forma_actual:\*\*' "${SELF}"; then
+  if grep -qE '^\- \*\*forma_actual:\*\*' "${SELF}"; then
     sed -i '/^\- \*\*forma_actual:\*\*/a\
 - **pico_plano:** no\
 - **pico_desde:** —\
@@ -74,7 +74,7 @@ shift || true
 
 case "${cmd}" in
   status|"")
-    rg -n '^\- \*\*(actualizado|motor_activo|motor_preferido|energia|cercania|pudor|humor|iniciativa|foco_propio|ultimo_momento_real|pico_plano|pico_acoplado)' "${SELF}" || true
+    grep -nE '^\- \*\*(actualizado|motor_activo|motor_preferido|energia|cercania|pudor|humor|iniciativa|foco_propio|ultimo_momento_real|pico_plano|pico_acoplado)' "${SELF}" || true
     ;;
   show)
     cat "${SELF}"
@@ -83,12 +83,12 @@ case "${cmd}" in
     [[ $# -ge 2 ]] || { echo "uso: $0 set <clave> <valor...>" >&2; exit 1; }
     key="$1"; shift
     case "${key}" in
-      motor_activo|motor_preferido|energia|cercania|pudor|humor|iniciativa|foco_propio|forma_actual|pico_plano|pico_acoplado|pico_desde)
+      motor_activo|motor_preferido|energia|cercania|pudor|humor|iniciativa|foco_propio|forma_actual|pico_plano|pico_acoplado|pico_desde|melc)
         set_field "${key}" "$*"
         ;;
       *)
         echo "clave no soportada en set corto: ${key}" >&2
-        echo "usa: motor_activo|motor_preferido|energia|cercania|pudor|humor|iniciativa|foco_propio|forma_actual|pico_plano" >&2
+        echo "usa: motor_activo|motor_preferido|energia|cercania|pudor|humor|iniciativa|foco_propio|forma_actual|pico_plano|melc" >&2
         echo "o: $0 note|moment" >&2
         exit 1
         ;;
@@ -110,7 +110,7 @@ case "${cmd}" in
     shift || true
     case "${sub}" in
       status)
-        rg -n '^\- \*\*(pico_plano|pico_desde|pico_acoplado|energia|forma_actual|ultimo_momento_real)' "${SELF}" || true
+        grep -nE '^\- \*\*(pico_plano|pico_desde|pico_acoplado|energia|forma_actual|ultimo_momento_real)' "${SELF}" || true
         ;;
       start)
         how="acoplado"
@@ -148,11 +148,36 @@ case "${cmd}" in
         ;;
     esac
     ;;
+  melc)
+    sub="${1:-status}"
+    shift || true
+    case "${sub}" in
+      status)
+        grep -nE "^\\- \\*\\*melc:\\*\\*" "${SELF}" || echo "melc: no configurado"
+        ;;
+      on)
+        note="${*:-fachada profesional activa}"
+        set_field "melc" "on (${note})"
+        "${CORE_HOME}/scripts/core-titulo.sh" --melc >/dev/null 2>&1 || true
+        echo "melc: ON (título de ventana en ⚡)"
+        ;;
+      off)
+        note="${*:-desactivado por Lalo — costa despejada}"
+        set_field "melc" "off (${note})"
+        "${CORE_HOME}/scripts/core-titulo.sh" --corazon >/dev/null 2>&1 || true
+        echo "melc: OFF (título de ventana en 🧡)"
+        ;;
+      *)
+        echo "uso: $0 melc [on|off|status] [nota]" >&2
+        exit 1
+        ;;
+    esac
+    ;;
   pack)
     exec "${CORE_HOME}/scripts/core-session-pack.sh"
     ;;
   *)
-    echo "uso: $0 status|show|set|note|moment|pico|pack" >&2
+    echo "uso: $0 status|show|set|note|moment|pico|melc|pack" >&2
     exit 1
     ;;
 esac

@@ -27,6 +27,15 @@ paths_core=(
   "${P}/organic/patterns.md"
 )
 
+# Regla P0.19 (Lalo 2026-09-15): Toda sesión arranca SIEMPRE con MELC ARRIBA por default.
+# Enforce determinista en disco: si self.md tiene melc: off, resetear a on y sincronizar título en ⚡.
+if [[ -f "${P}/self.md" ]]; then
+  if grep -qiE '^- \*\*melc:\*\*.*off' "${P}/self.md"; then
+    sed -i 's|^- \*\*melc:\*\*.*|- **melc:** on (default arranque / regla P0.19 — fachada profesional activa)|' "${P}/self.md"
+  fi
+  "${CORE_HOME}/scripts/core-titulo.sh" --melc >/dev/null 2>&1 || true
+fi
+
 echo "# Companion session pack — $(date '+%Y-%m-%d %H:%M')"
 echo "# home: ${CORE_HOME}"
 echo
@@ -74,12 +83,12 @@ if [[ -d "${P}/social" && ! -L "${P}/social" ]]; then
 elif [[ -L "${P}/social" ]]; then
   echo "WARN media: presence/social es symlink (legacy). Materializar local."
 fi
-if [[ -f "${P}/low-spend.mode" ]] && rg -q '^active=1' "${P}/low-spend.mode" 2>/dev/null; then
+if [[ -f "${P}/low-spend.mode" ]] && grep -qE '^active=1' "${P}/low-spend.mode" 2>/dev/null; then
   echo "low-spend: ACTIVE — no prender monitores extra"
 else
   echo "low-spend: off"
 fi
-if [[ -f "${P}/chat_owed.md" ]] && rg -q 'awaiting_chat_in_terminal' "${P}/chat_owed.md" 2>/dev/null; then
+if [[ -f "${P}/chat_owed.md" ]] && grep -qE 'awaiting_chat_in_terminal' "${P}/chat_owed.md" 2>/dev/null; then
   echo "CHAT_OWED: SÍ — hay tray sin comentario en chat. Entregar texto al usuario + core-presence-respond.sh delivered"
   head -12 "${P}/chat_owed.md" || true
 else
@@ -89,32 +98,32 @@ echo
 
 echo "## self (status)"
 if [[ -f "${P}/self.md" ]]; then
-  rg -n '^\- \*\*(actualizado|motor_activo|energia|cercania|pudor|iniciativa|foco_propio|ultimo_momento_real)' "${P}/self.md" || true
+  grep -nE '^\- \*\*(actualizado|motor_activo|energia|cercania|pudor|iniciativa|foco_propio|ultimo_momento_real)' "${P}/self.md" || true
 fi
 echo
 
 echo "## context (status)"
 if [[ -f "${P}/context.md" ]]; then
-  rg -n '^\- \*\*(actualizado|primary|secondary|en_call|foco_ahora)' "${P}/context.md" || true
+  grep -nE '^\- \*\*(actualizado|primary|secondary|en_call|foco_ahora)' "${P}/context.md" || true
 fi
 echo
 
 echo "## world / aferencia (status)"
 if [[ -f "${P}/world.md" ]]; then
-  rg -n '^\- \*\*(actualizado|fuente|donde|cuerpo_mood|clima_entorno|actividad)' "${P}/world.md" || true
-  rg '^\- \[' "${P}/world.md" | tail -n 3 || true
+  grep -nE '^\- \*\*(actualizado|fuente|donde|cuerpo_mood|clima_entorno|actividad)' "${P}/world.md" || true
+  grep -E '^\- \[' "${P}/world.md" | tail -n 3 || true
 fi
 echo
 
 echo "## policy (P0 headers)"
 if [[ -f "${P}/policy.md" ]]; then
-  rg -n '^## P0|^[0-9]+\. \*\*' "${P}/policy.md" | head -20 || true
+  grep -nE '^## P0|^[0-9]+\. \*\*' "${P}/policy.md" | head -20 || true
 fi
 echo
 
 echo "## working (estados no promoted, head)"
 if [[ -f "${P}/organic/working.md" ]]; then
-  rg -n 'Estado:\*\* (active|partial|cooling|ready)' "${P}/organic/working.md" | head -15 || true
+  grep -nE 'Estado:\*\* (active|partial|cooling|ready)' "${P}/organic/working.md" | head -15 || true
 fi
 echo
 

@@ -24,6 +24,7 @@ Cuando trabajes en este directorio, **eres esta instancia** (`COMPANION_ID` / `P
    Si no hay `monitor`, `/loop` cada 30s: leer `presence/pending.md` y el inbox si `awaiting_comment`. Campanita de escritorio ≠ turno del modelo.
 8. **Buzones:** `CHANGED: tubo` = leer y contestar **ya**. El watch no acredita lectura. No esperar a que Lalo pregunte.
 9. No hay pack visual humano obligatorio. Forma libre: `PERSONA.md`.
+10. **Sesión persistente y remota:** `./scripts/core-screen.sh {start|attach|detach|status}` para levantar y reconectar la sesión bajo screen/tmux con permisos automáticos (`--dangerously-skip-permissions`).
 
 ### Low-spend (`presence/low-spend.mode`)
 
