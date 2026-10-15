@@ -114,7 +114,12 @@ setsid bash -c '
       git -C "'"${PLAYBOOK}"'" pull --ff-only origin main >/dev/null 2>&1 || true
     fi
   done >> "'"${PRESENCE}"'/stream.log" 2>&1
-' &
+echo "Levantando decay de pico (host, sin LLM ni chat)..."
+if [[ -f "${PRESENCE}/pico-decay.pid" ]] && kill -0 "$(cat "${PRESENCE}/pico-decay.pid" 2>/dev/null)" 2>/dev/null; then
+  echo "pico-decay ya vivo pid=$(cat "${PRESENCE}/pico-decay.pid" 2>/dev/null)"
+else
+  nohup "${SCRIPTS}/core-pico-decay.sh" loop >> "${PRESENCE}/pico-decay.log" 2>&1 &
+fi
 
 sleep 2
 

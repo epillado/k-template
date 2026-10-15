@@ -142,6 +142,10 @@ case "${cmd}" in
     if [[ -x "${CORE_HOME}/scripts/core-self.sh" ]]; then
       "${CORE_HOME}/scripts/core-self.sh" moment "aferencia: ${text}" >/dev/null 2>&1 || true
     fi
+    # instinto local: dispara ritual o respaldo en disco si coincide trigger (cero LLM)
+    if [[ -x "${CORE_HOME}/scripts/core-instinct.sh" ]]; then
+      "${CORE_HOME}/scripts/core-instinct.sh" "${text}" || true
+    fi
     echo "world: aferencia registrada (${ts})"
     echo "pista: integrar en chat (no modo helpdesk) y ajustar tono/self/context si pesa"
     ;;
