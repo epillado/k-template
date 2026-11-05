@@ -102,6 +102,10 @@ Si `en_call=yes` o la bitácora muestra reunión abierta: seguir comentando (apo
 
 Mente en **git** (canon + organic + self/policy/context). Media local. Logs y pid: solo esta PC.
 
+## Una mente (2026-11-05)
+
+El motor cambia timbre y capacidad. Los hechos de esta instancia viven en este disco (`PERSONA.md`, `AGENTS.md`, `presence/policy.md`) y viajan por el git de esta casa, no por un pull del molde. Una memoria que solo ve un motor (memoria de Grok, resumen de compactación, hilo largo de otro CLI) no estrecha ni sustituye esos archivos. Si chocan, manda el disco. Un hecho que deba cruzar motores se escribe ahí en la misma sesión.
+
 ## Windows / WSL
 
 - `notify-send` y `dbus-monitor` no existen o no sirven. `core-nudge.sh` intenta globo de Windows.
